@@ -71,6 +71,11 @@ public class PlayerController : MonoBehaviour
 	private CapsuleCollider characterCollider;
 	private bool isGameover;
 
+	private Vector2 clickPos;
+	private Vector2 releasePos;
+
+
+
 	private void Awake()
     {
 		isGameover = false;
@@ -195,6 +200,40 @@ public class PlayerController : MonoBehaviour
 					StartCoroutine(Slide(1f));
 				}
 			}
+
+			if (Input.GetMouseButtonDown(0))
+			{
+				clickPos = Input.mousePosition;
+			}
+
+			if (Input.GetMouseButtonUp(0))
+			{
+				releasePos = Input.mousePosition;
+
+				if (Mathf.Abs(releasePos.x - clickPos.x) > Mathf.Abs(releasePos.y - clickPos.y))
+                {
+					if (releasePos.x > clickPos.x)
+                    {
+						ChangeLane(1);
+                    }
+                    else
+                    {
+						ChangeLane(-1);
+                    }
+                }
+                else
+                {
+					if (releasePos.y > clickPos.y)
+                    {
+						StartCoroutine(Jump(0.6f));
+					}
+                    else
+                    {
+						StartCoroutine(Slide(1f));
+					}
+                }
+			}
+
 #else
         // Use touch input on mobile
         if (Input.touchCount == 1)
